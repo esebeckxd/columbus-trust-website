@@ -80,11 +80,18 @@
       <div class="container">
         <div class="credibility-label">Aus de Häusa vo de greßtn europäischn Finanzinstitut</div>
         <div class="credibility-logos">
-          <span>Allianz SE</span>
-          <span>AXA</span>
-          <span>MeesPierson</span>
-          <span>Gerling</span>
-          <span>Allianz Global Life</span>
+          <div class="marquee-track">
+            <span>Allianz SE</span>
+            <span>AXA</span>
+            <span>MeesPierson</span>
+            <span>Gerling</span>
+            <span>Allianz Global Life</span>
+            <span aria-hidden="true">Allianz SE</span>
+            <span aria-hidden="true">AXA</span>
+            <span aria-hidden="true">MeesPierson</span>
+            <span aria-hidden="true">Gerling</span>
+            <span aria-hidden="true">Allianz Global Life</span>
+          </div>
         </div>
       </div>
     </section>
@@ -114,20 +121,20 @@
           </div>
         </div>
 
-        <div class="stats reveal">
-          <div class="stat">
-            <div class="stat-num">25<small>+</small></div>
+        <div class="stats">
+          <div class="stat" data-animate="count-up" data-target="25">
+            <div class="stat-num"><span class="stat-value">0</span><small>+</small></div>
             <div class="stat-label">Joar am Markt</div>
           </div>
-          <div class="stat">
-            <div class="stat-num">1999</div>
+          <div class="stat" data-animate="count-down" data-target="1999" data-from="2026">
+            <div class="stat-num"><span class="stat-value">2026</span></div>
             <div class="stat-label">Grindt z'Minga</div>
           </div>
-          <div class="stat">
+          <div class="stat" data-animate="fade">
             <div class="stat-num">DACH</div>
             <div class="stat-label">Hoamatmarkt &amp; Netzwerk</div>
           </div>
-          <div class="stat">
+          <div class="stat" data-animate="fade">
             <div class="stat-num">M&amp;A</div>
             <div class="stat-label">Financial Services Schwerpunkt</div>
           </div>
@@ -369,6 +376,47 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    (function() {
+      const section = document.querySelector('.stats');
+      if (!section) return;
+      const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+      const animateNumber = (el, from, to, duration) => {
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min((now - start) / duration, 1);
+          el.textContent = Math.round(from + (to - from) * easeOutCubic(t));
+          if (t < 1) requestAnimationFrame(tick);
+          else el.textContent = to;
+        };
+        requestAnimationFrame(tick);
+      };
+      const runSequence = () => {
+        const stats = section.querySelectorAll('.stat');
+        let delay = 0;
+        stats.forEach((stat) => {
+          const type = stat.dataset.animate;
+          setTimeout(() => {
+            stat.classList.add('is-visible');
+            if (type === 'count-up') {
+              animateNumber(stat.querySelector('.stat-value'), 0, parseInt(stat.dataset.target, 10), 1200);
+            } else if (type === 'count-down') {
+              const from = parseInt(stat.dataset.from, 10) || new Date().getFullYear();
+              animateNumber(stat.querySelector('.stat-value'), from, parseInt(stat.dataset.target, 10), 1400);
+            }
+          }, delay);
+          if (type === 'count-up') delay += 1100;
+          else if (type === 'count-down') delay += 1300;
+          else delay += 280;
+        });
+      };
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { runSequence(); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.35 });
+      obs.observe(section);
+    })();
   </script>
 </body>
 </html>
