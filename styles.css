@@ -591,6 +591,15 @@ section { padding-block: clamp(4.5rem, 9vw, 8rem); }
   padding: clamp(2rem, 3.5vw, 3rem);
   position: relative;
   overflow: hidden;
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.45s var(--ease);
+}
+
+.partner-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 28px 60px -28px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(176, 141, 87, 0.28);
+  border-color: rgba(176, 141, 87, 0.42);
 }
 
 .partner-card::before {
