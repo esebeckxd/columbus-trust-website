@@ -804,6 +804,48 @@ section { padding-block: clamp(4.5rem, 9vw, 8rem); }
   transform: none;
 }
 
+/* Stagger system — used for service/team cards and their inner content */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+}
+.stagger-item.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.stagger-child {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+}
+.stagger-child.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero title — line-by-line reveal */
+.hero-title-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+}
+.hero-title-line.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-item,
+  .stagger-child,
+  .hero-title-line {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 960px) {

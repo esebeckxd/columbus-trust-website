@@ -57,9 +57,9 @@
         <div class="hero-text reveal">
           <div class="eyebrow">Seit 1999 · München</div>
           <h1 class="hero-title display">
-            Vertrauen.<br />
-            Erfahrung.<br />
-            <em>Navigation.</em>
+            <span class="hero-title-line">Vertrauen.</span>
+            <span class="hero-title-line">Erfahrung.</span>
+            <span class="hero-title-line"><em>Navigation.</em></span>
           </h1>
           <p class="hero-lead">
             Columbus Trust begleitet institutionelle Kunden im Finanzdienstleistungssektor als strategischer Partner und Transaktionsberater — mit über zwei Jahrzehnten Markterfahrung im deutschsprachigen und kontinentaleuropäischen Raum.
@@ -157,14 +157,14 @@
           </p>
         </div>
 
-        <div class="service-grid">
-          <article class="service-card reveal">
-            <div class="service-num">01 — Transaktionsberatung</div>
-            <h3>Private Market Secondary Transactions</h3>
-            <p>
+        <div class="service-grid" data-stagger="220" data-stagger-child="110">
+          <article class="service-card stagger-item">
+            <div class="service-num stagger-child">01 — Transaktionsberatung</div>
+            <h3 class="stagger-child">Private Market Secondary Transactions</h3>
+            <p class="stagger-child">
               Wir begleiten insbesondere deutschsprachige institutionelle Investoren beim Aufbau und der Steuerung von Private-Market-Sekundärtransaktionen in einem wachsenden, hochdynamischen Marktumfeld.
             </p>
-            <ul class="service-list">
+            <ul class="service-list stagger-child">
               <li>Prüfung von Sinnhaftigkeit und Erlösmöglichkeiten</li>
               <li>Entwicklung idealer Deal- und Verkaufsstrukturen</li>
               <li>Effiziente Durchführung strukturierter Bieterverfahren</li>
@@ -172,13 +172,13 @@
             </ul>
           </article>
 
-          <article class="service-card reveal">
-            <div class="service-num">02 — Strategische Beratung</div>
-            <h3>Financial Services Advisory</h3>
-            <p>
+          <article class="service-card stagger-item">
+            <div class="service-num stagger-child">02 — Strategische Beratung</div>
+            <h3 class="stagger-child">Financial Services Advisory</h3>
+            <p class="stagger-child">
               Wir beraten Versicherungsunternehmen bei den großen Herausforderungen des anhaltenden Niedrigzinsumfeldes, der Digitalisierung sowie bei Bestands- und Run-off-Transaktionen — insbesondere im kontinentaleuropäischen Markt.
             </p>
-            <ul class="service-list">
+            <ul class="service-list stagger-child">
               <li>Entwicklung nachhaltiger Strategien für Lebensversicherer</li>
               <li>Prozessstandardisierung, Effizienzhebung, Automatisierung</li>
               <li>Bewertung und Umsetzung von Digitalisierungs­strategien</li>
@@ -201,13 +201,13 @@
           </p>
         </div>
 
-        <div class="team-grid">
+        <div class="team-grid" data-stagger="260" data-stagger-child="100">
 
-          <article class="partner-card reveal">
-            <h3 class="partner-name">Stephan Leppla</h3>
-            <div class="partner-role">Gründer &amp; Geschäftsführender Partner</div>
+          <article class="partner-card stagger-item">
+            <h3 class="partner-name stagger-child">Stephan Leppla</h3>
+            <div class="partner-role stagger-child">Gründer &amp; Geschäftsführender Partner</div>
 
-            <ul class="partner-bio">
+            <ul class="partner-bio stagger-child">
               <li>
                 <strong>Ausbildung</strong>
                 Dipl.-Betriebswirt (EBS) · Dipl.-Verwaltungswirt (Auswärtiges Amt)
@@ -229,17 +229,17 @@
               </li>
             </ul>
 
-            <div class="partner-contact">
+            <div class="partner-contact stagger-child">
               <a href="mailto:stephan.leppla@columbus-trust.de">stephan.leppla@columbus-trust.de</a>
               <a href="tel:+491722121058">+49 172 21 21 058</a>
             </div>
           </article>
 
-          <article class="partner-card reveal">
-            <h3 class="partner-name">Dr. Ralph Leppla</h3>
-            <div class="partner-role">Gründer &amp; Geschäftsführender Partner</div>
+          <article class="partner-card stagger-item">
+            <h3 class="partner-name stagger-child">Dr. Ralph Leppla</h3>
+            <div class="partner-role stagger-child">Gründer &amp; Geschäftsführender Partner</div>
 
-            <ul class="partner-bio">
+            <ul class="partner-bio stagger-child">
               <li>
                 <strong>Ausbildung</strong>
                 Studium der Rechtswissenschaften in Saarbrücken, Lausanne und München
@@ -258,7 +258,7 @@
               </li>
             </ul>
 
-            <div class="partner-contact">
+            <div class="partner-contact stagger-child">
               <a href="mailto:ralph.leppla@columbus-trust.de">ralph.leppla@columbus-trust.de</a>
             </div>
           </article>
@@ -422,11 +422,11 @@
             } else if (type === 'count-down') {
               const target = parseInt(stat.dataset.target, 10);
               const from = parseInt(stat.dataset.from, 10) || new Date().getFullYear();
-              animateNumber(stat.querySelector('.stat-value'), from, target, 1400);
+              animateNumber(stat.querySelector('.stat-value'), from, target, 2400);
             }
           }, delay);
           if (type === 'count-up') delay += 1100;
-          else if (type === 'count-down') delay += 1300;
+          else if (type === 'count-down') delay += 2300;
           else delay += 280;
         });
       };
@@ -440,6 +440,41 @@
         });
       }, { threshold: 0.35 });
       obs.observe(section);
+    })();
+
+    // Hero title — line-by-line reveal on first paint
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.hero-title-line').forEach((line, i) => {
+        setTimeout(() => line.classList.add('is-visible'), 80 + i * 160);
+      });
+    });
+
+    // Generic stagger reveal — cards in a group enter sequentially,
+    // and each card's children cascade in after it
+    (function() {
+      const groups = document.querySelectorAll('[data-stagger]');
+      if (!groups.length) return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const group = entry.target;
+          const itemStep = parseInt(group.dataset.stagger, 10) || 200;
+          const childStep = parseInt(group.dataset.staggerChild || '0', 10);
+          const items = group.querySelectorAll(':scope > .stagger-item');
+          items.forEach((item, i) => {
+            setTimeout(() => {
+              item.classList.add('is-visible');
+              if (childStep > 0) {
+                item.querySelectorAll('.stagger-child').forEach((c, j) => {
+                  setTimeout(() => c.classList.add('is-visible'), j * childStep);
+                });
+              }
+            }, i * itemStep);
+          });
+          obs.unobserve(group);
+        });
+      }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+      groups.forEach((g) => obs.observe(g));
     })();
   </script>
 </body>

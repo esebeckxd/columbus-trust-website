@@ -55,9 +55,9 @@
         <div class="hero-text reveal">
           <div class="eyebrow">Established 1999 · Munich</div>
           <h1 class="hero-title display">
-            Trust.<br />
-            Experience.<br />
-            <em>Navigation.</em>
+            <span class="hero-title-line">Trust.</span>
+            <span class="hero-title-line">Experience.</span>
+            <span class="hero-title-line"><em>Navigation.</em></span>
           </h1>
           <p class="hero-lead">
             Columbus Trust advises institutional clients in the financial services sector as a strategic partner and transaction advisor — with more than two decades of market expertise across the German-speaking and continental European landscape.
@@ -152,14 +152,14 @@
           </p>
         </div>
 
-        <div class="service-grid">
-          <article class="service-card reveal">
-            <div class="service-num">01 — Transaction Advisory</div>
-            <h3>Private Market Secondary Transactions</h3>
-            <p>
+        <div class="service-grid" data-stagger="220" data-stagger-child="110">
+          <article class="service-card stagger-item">
+            <div class="service-num stagger-child">01 — Transaction Advisory</div>
+            <h3 class="stagger-child">Private Market Secondary Transactions</h3>
+            <p class="stagger-child">
               We support German-speaking institutional investors in shaping and executing secondary transactions in private markets — a growing, highly dynamic arena that rewards experience and structure.
             </p>
-            <ul class="service-list">
+            <ul class="service-list stagger-child">
               <li>Assessment of strategic rationale and value-realisation options</li>
               <li>Design of optimal deal and sale structures</li>
               <li>Efficient execution of structured bidding processes</li>
@@ -167,13 +167,13 @@
             </ul>
           </article>
 
-          <article class="service-card reveal">
-            <div class="service-num">02 — Strategic Advisory</div>
-            <h3>Financial Services Advisory</h3>
-            <p>
+          <article class="service-card stagger-item">
+            <div class="service-num stagger-child">02 — Strategic Advisory</div>
+            <h3 class="stagger-child">Financial Services Advisory</h3>
+            <p class="stagger-child">
               We advise insurance companies on the defining challenges of the prolonged low-interest-rate environment, digital transformation and portfolio / run-off transactions — with particular depth in continental Europe.
             </p>
-            <ul class="service-list">
+            <ul class="service-list stagger-child">
               <li>Development of sustainable strategies for life insurers</li>
               <li>Process standardisation, efficiency &amp; automation</li>
               <li>Evaluation and execution of digital transformation</li>
@@ -195,13 +195,13 @@
           </p>
         </div>
 
-        <div class="team-grid">
+        <div class="team-grid" data-stagger="260" data-stagger-child="100">
 
-          <article class="partner-card reveal">
-            <h3 class="partner-name">Stephan Leppla</h3>
-            <div class="partner-role">Co-Founder &amp; Managing Partner</div>
+          <article class="partner-card stagger-item">
+            <h3 class="partner-name stagger-child">Stephan Leppla</h3>
+            <div class="partner-role stagger-child">Co-Founder &amp; Managing Partner</div>
 
-            <ul class="partner-bio">
+            <ul class="partner-bio stagger-child">
               <li>
                 <strong>Education</strong>
                 Dipl.-Betriebswirt (EBS) · Dipl.-Verwaltungswirt (German Federal Foreign Office)
@@ -223,17 +223,17 @@
               </li>
             </ul>
 
-            <div class="partner-contact">
+            <div class="partner-contact stagger-child">
               <a href="mailto:stephan.leppla@columbus-trust.de">stephan.leppla@columbus-trust.de</a>
               <a href="tel:+491722121058">+49 172 21 21 058</a>
             </div>
           </article>
 
-          <article class="partner-card reveal">
-            <h3 class="partner-name">Dr. Ralph Leppla</h3>
-            <div class="partner-role">Co-Founder &amp; Managing Partner</div>
+          <article class="partner-card stagger-item">
+            <h3 class="partner-name stagger-child">Dr. Ralph Leppla</h3>
+            <div class="partner-role stagger-child">Co-Founder &amp; Managing Partner</div>
 
-            <ul class="partner-bio">
+            <ul class="partner-bio stagger-child">
               <li>
                 <strong>Education</strong>
                 Law studies in Saarbrücken, Lausanne and Munich
@@ -252,7 +252,7 @@
               </li>
             </ul>
 
-            <div class="partner-contact">
+            <div class="partner-contact stagger-child">
               <a href="mailto:ralph.leppla@columbus-trust.de">ralph.leppla@columbus-trust.de</a>
             </div>
           </article>
@@ -402,11 +402,11 @@
               animateNumber(stat.querySelector('.stat-value'), 0, parseInt(stat.dataset.target, 10), 1200);
             } else if (type === 'count-down') {
               const from = parseInt(stat.dataset.from, 10) || new Date().getFullYear();
-              animateNumber(stat.querySelector('.stat-value'), from, parseInt(stat.dataset.target, 10), 1400);
+              animateNumber(stat.querySelector('.stat-value'), from, parseInt(stat.dataset.target, 10), 2400);
             }
           }, delay);
           if (type === 'count-up') delay += 1100;
-          else if (type === 'count-down') delay += 1300;
+          else if (type === 'count-down') delay += 2300;
           else delay += 280;
         });
       };
@@ -416,6 +416,38 @@
         });
       }, { threshold: 0.35 });
       obs.observe(section);
+    })();
+
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.hero-title-line').forEach((line, i) => {
+        setTimeout(() => line.classList.add('is-visible'), 80 + i * 160);
+      });
+    });
+
+    (function() {
+      const groups = document.querySelectorAll('[data-stagger]');
+      if (!groups.length) return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const group = entry.target;
+          const itemStep = parseInt(group.dataset.stagger, 10) || 200;
+          const childStep = parseInt(group.dataset.staggerChild || '0', 10);
+          const items = group.querySelectorAll(':scope > .stagger-item');
+          items.forEach((item, i) => {
+            setTimeout(() => {
+              item.classList.add('is-visible');
+              if (childStep > 0) {
+                item.querySelectorAll('.stagger-child').forEach((c, j) => {
+                  setTimeout(() => c.classList.add('is-visible'), j * childStep);
+                });
+              }
+            }, i * itemStep);
+          });
+          obs.unobserve(group);
+        });
+      }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+      groups.forEach((g) => obs.observe(g));
     })();
   </script>
 </body>
